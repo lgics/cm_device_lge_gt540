@@ -1,13 +1,108 @@
 -include vendor/lge/gt540/BoardConfigVendor.mk
--include device/lge/msm7x27-common/BoardConfigCommon.mk
 
-# Kernel config
-TARGET_KERNEL_CONFIG := cyanogenmod_gt540_defconfig
-
-TARGET_BOOTLOADER_BOARD_NAME := gt540
-TARGET_OTA_ASSERT_DEVICE := swift,gt540
-
-BOARD_KERNEL_CMDLINE := mem=210M console=null androidboot.hardware=gt540
-
+# CAMERA
 USE_CAMERA_STUB := false
 
+# HEADERS
+TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include
+
+# BOOTLOADER
+TARGET_NO_BOOTLOADER := true
+TARGET_BOOTLOADER_BOARD_NAME := swift
+TARGET_OTA_ASSERT_DEVICE := swift,gt540
+
+# Kernel & Recovery
+TARGET_KERNEL_CONFIG := cyanogenmod_gt540_defconfig
+BOARD_KERNEL_CMDLINE := mem=214M console=ttyMSM2,115200n8 androidboot.hardware=swift
+BOARD_KERNEL_BASE := 0x00200000
+BOARD_PAGE_SIZE := 0x00000800
+TARGET_PREBUILT_KERNEL := device/lge/gt540/prebuilt/kernel
+BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_CUSTOM_GRAPHICS := ../../../device/lge/msm7x27-common/recovery/graphics.c
+
+# PARTITIONS
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00500000
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00500000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 0x0f500000
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x08a80000
+BOARD_FLASH_BLOCK_SIZE := 131072
+
+# BOARD PROPERTIES
+TARGET_BOARD_PLATFORM := msm7x27
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
+TARGET_ARCH := arm
+TARGET_CPU_ABI := armeabi
+TARGET_ARCH_VARIANT := armv6-vfp
+TARGET_CPU_ABI := armeabi-v6l
+TARGET_CPU_ABI2 := armeabi
+ARCH_ARM_HAVE_VFP := true
+
+# QUALCOMM hardware
+BOARD_USES_QCOM_HARDWARE := false
+BOARD_USES_QCOM_LIBS := true
+BOARD_USES_QCOM_LIBRPC := true
+BOARD_USES_QCOM_LEGACY := true
+
+# GPS
+BOARD_USES_QCOM_GPS := true
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := swift
+BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 1240
+
+# USB
+BOARD_UMS_LUNFILE := "/sys/devices/platform/usb_mass_storage/lun0/file"
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun0/file
+
+# WIFI
+BOARD_WLAN_DEVICE := bcm4325
+WIFI_DRIVER_FW_PATH_STA         := "/system/etc/wl/rtecdc.bin"
+WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
+WIFI_DRIVER_MODULE_NAME         := wireless
+WIFI_DRIVER_MODULE_PATH         := "/system/lib/modules/wireless.ko"
+WIFI_DRIVER_MODULE_ARG          := "firmware_path=/etc/wl/rtecdc.bin nvram_path=/etc/wl/nvram.txt" 
+WPA_SUPPLICANT_VERSION          := VER_0_5_X
+HOSTAPD_VERSION                 := VER_0_5_X
+WIFI_DRIVER_HAS_LGE_SOFTAP      := true
+BOARD_WPA_SUPPLICANT_DRIVER     := WEXT
+
+# AUDIO
+TARGET_PROVIDES_LIBAUDIO := true
+BOARD_USES_AUDIO_LEGACY := false
+BOARD_COMBO_DEVICE_SUPPORTED := true
+
+# BLUETOOTH
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_BCM := true
+BOARD_CUSTOM_BRCM_PATCHRAM_PLUS := ../../../device/lge/gt540/prebuilt/brcm_patchram_plus.c
+
+# FM Radio
+BOARD_FM_DEVICE := bcm4325
+BOARD_HAVE_FM_RADIO := true
+BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
+
+# Enable JIT
+JS_ENGINE := v8
+HTTP := chrome
+WITH_JIT := true
+ENABLE_JSC_JIT := true
+
+# GRAPHICS
+BOARD_EGL_CFG := device/lge/msm7x27-common/configs/egl.cfg
+USE_OPENGL_RENDERER := true
+TARGET_USES_GENLOCK := true
+TARGET_USE_OVERLAY := false
+TARGET_HAVE_BYPASS := false
+TARGET_USES_C2D_COMPOSITION := false
+BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+BOARD_USE_SKIA_LCDTEXT := true
+
+COMMON_GLOBAL_CFLAGS += -DTARGET_MSM7x27
+COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
+COMMON_GLOBAL_CFLAGS += -DREFRESH_RATE=60
+COMMON_GLOBAL_CFLAGS += -DMISSING_GRALLOC_BUFFERS
+COMMON_GLOBAL_CFLAGS += -DBINDER_COMPAT
+
+# ICS FLAGS for compatibility
+BOARD_USE_LEGACY_TOUCHSCREEN := true
+TARGET_USES_OLD_LIBSENSORS_HAL := true
+TARGET_SENSORS_NO_OPEN_CHECK := true
+BOARD_PROVIDES_LIBRIL := true
