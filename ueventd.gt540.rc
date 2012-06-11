@@ -163,15 +163,6 @@
 /dev/msm_vidc*            0660   system     graphics
 
 /dev/oncrpc/*             0660  system	     qcom_oncrpc
-/dev/ami304hal		  0640  compass	     system
-/dev/ami304daemon	  0640  compass	     system
-/dev/ami304		  0640  compass	     system
-/dev/K3DH		  0640  compass	     system
-/dev/KR3DH		  0640  compass	     system
-/dev/KR3DM		  0640  compass	     system
-
-
-
 
 /dev/oncrpc/*             0660   radio       system
 /dev/msm_camera/*          0660   system       system

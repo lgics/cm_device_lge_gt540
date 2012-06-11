@@ -9,18 +9,97 @@ on fs
     symlink /mnt/sdcard /sdcard
 
 on boot
+	chown system radio /dev/rtc1
+	chmod 0660 /dev/rtc1
+	chown system audio /dev/msm_preproc_ctl
+	chmod 0660 /dev/msm_preproc_ctl
+	chown system audio /dev/msm_pcm_dec
+	chmod 0660 /dev/msm_pcm_dec
+	chown root root /dev/system_bus_freq
+	chmod 0666 /dev/system_bus_freq
+	chown root root /dev/cpu_dma_latency
+	chmod 0666 /dev/cpu_dma_latency
+	chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
+	chmod 0660 /sys/module/bluetooth_power/parameters/power
+	chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
+	chmod 0666 /sys/class/rfkill/rfkill0/type
+	chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+	chmod 0666 /sys/class/rfkill/rfkill0/state
+	chown bluetooth bluetooth /proc/bluetooth/sleep/proto
+	chmod 0660 /proc/bluetooth/sleep/proto
+	chown system system /sys/module/sco/parameters/disable_esco
+	chown bluetooth bluetooth /dev/ttyHS0
+	chmod 0666 /dev/ttyHS0
+	chmod 0666 /dev/msm_snd
+	mkdir /data/misc/hcid 0770 bluetooth bluetooth
+	chmod 0666 /sys/class/timed_output/vibrator/enable
+	chmod 0666 /sys/class/timed_output/vibrator/amp
+	chmod 0666 dev/akm8973_aot
+	chmod 0666 dev/bma150
+	mkdir /data/radio 0770 radio radio
+	chmod 0666 /dev/oncrpc/3000008c:00040000
+	chmod 0666 /dev/oncrpc/3000000e:00060000
+	chown system system /sys/class/backlight/rt9393/brightness
+	chown system system /sys/class/backlight/rt9393/max_brightness
+	chown 666  /sys/class/backlight/rt9393/max_brightness
+	chown 666  /sys/class/backlight/rt9393/actual_brightness
+	chown system graphics /dev/kgsl
+	chmod 0666 /dev/kgsl
+	chmod 0666 /dev/pmem
+	chown system audio /dev/msm_aac
+	chmod 0660 /dev/msm_aac
+	chown system audio /dev/msm_amrnb_in
+	chmod 0660 /dev/msm_amrnb_in
+	chown system audio /dev/msm_amrnb
+	chmod 0660 /dev/msm_amrnb
+	chown system audio /dev/msm_qcelp
+	chmod 0660 /dev/msm_qcelp
+	chown system audio /dev/msm_evrc
+	chmod 0660 /dev/msm_evrc
+	chown system audio /dev/msm_voicememo
+	chmod 0660 /dev/msm_voicememo
+	chown system graphics /dev/msm_rotator
+	chmod 0660 /dev/msm_rotator
+	chown system audio /dev/msm_preproc_ctl
+	chmod 0660 /dev/msm_preproc_ctl
+	chown system audio /dev/pmem_smipool
+	chmod 0660 /dev/pmem_smipool
+	chown system audio /dev/pmem_audio
+	chmod 0660 /dev/pmem_audio
+	chown system audio /dev/msm_amr_in
+	chmod 0660 /dev/msm_amr_in
+	chown system audio /dev/msm_amrwb
+	chmod 0660 /dev/msm_amrwb
+	chown system audio /dev/msm_vidc_reg
+	chmod 0660 /dev/msm_vidc_reg
+	chown system audio /dev/msm_vidc_dec
+	chmod 0660 /dev/msm_vidc_dec
+	chown system audio /dev/msm_vidc_enc
+	chmod 0660 /dev/msm_vidc_enc
+	chmod 0666 /dev/graphics/fb0
+	
+service qmuxd /system/bin/qmuxd
+	class main
+	user radio
+   	group radio
 
-# sensors
-  mkdir /data/amit 0777 ami304d ami304d
-  chmod 0666 /data/amit/AMI306_Config.ini
-  chmod 0666 /data/amit/AMI306_Config2.ini
+on property:init.svc.hcid=running
+	write /sys/devices/virtual/bluetooth/hci0/idle_timeout 7000
 
-  chown compass system /sys/bus/i2c/drivers/proximity_gp2ap/4-0044/enable
-  chmod 0660 /sys/bus/i2c/drivers/proximity_gp2ap/4-0044/enable
-
-
-service ami304d /system/bin/ami304d
-    class main
-    user compass
-    group system
-
+service btld /system/bin/logwrapper /system/bin/btld -lpm 1
+	class main
+	user root
+	group bluetooth net_bt_admin
+	disabled
+	oneshot
+	
+service hciattach /system/bin/brcm_patchram_plus --enable_hci --baudrate 3000000 --patchram /system/bin/BCM4325D1_004.002.004.0262.0270.hcd /dev/ttyHS0
+	class main
+	user bluetooth
+	group bluetooth net_bt_admin
+	disabled
+ 
+service akmd2 /system/bin/akmd2
+	class main
+	user compass
+	group system
